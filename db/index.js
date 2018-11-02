@@ -1,6 +1,6 @@
 const mysql = require('mysql')
 var pool = mysql.createPool({
-    host: "localhost",
+    host: "172.16.52.128",
     user: "user1",
     password: "123456",
     database: "ida"
