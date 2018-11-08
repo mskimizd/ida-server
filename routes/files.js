@@ -3,6 +3,7 @@ var path = require('path');
 var multer = require('multer');
 var cp = require('child_process');
 var moment = require('moment');
+var _ = require('lodash');
 
 var router = express.Router();
 var upload = multer({ dest: 'uploads/' })
@@ -37,7 +38,10 @@ router.post('/upload', upload.single('file'), async function (req, res, next) {
 
 /* Get uploaded files */
 router.post('/getUploaded', upload.single(), async function (req, res, next) {
+    var page = req.body.page;
     var rtn = {};
+
+    if(page === undefined) page = 1;
     var sql = "select * from upload_view order by upTimestamp desc";
     try {
         var rows = await db.query(sql)
@@ -46,7 +50,10 @@ router.post('/getUploaded', upload.single(), async function (req, res, next) {
         }
         rtn.code = 200;
         rtn.msg = "success";
-        rtn.data = rows;
+        rtn.data = {
+            total:rows.length,
+            rows:_.slice(rows, (parseInt(page)-1)*10, (parseInt(page))*10),
+        };
     } catch (err) {
         rtn.code = 300;
         rtn.msg = err;
