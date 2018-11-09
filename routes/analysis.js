@@ -180,6 +180,7 @@ router.post('/stats', multerx.single(), async function (req, res, next) {
     var tableName = req.body.table;
     var monthsList = req.body.months;
     var rtn = {};
+
     try {
         var monthCondition = "where month in (" + monthsList + ")";
         var sqlStats = "SELECT sum(monthsale) as monthSaleSum, sum(saleroom) as saleRoomSum FROM  " + tableName + " " + monthCondition;
@@ -758,9 +759,9 @@ router.post('/outjdgood', multerx.single(), async function (req, res, next) {
         // var sqlClass = " SELECT month, promotion, goodcode, sum(saleroom) as saleRoomSum FROM  " + tableName + " WHERE " + condition + "  GROUP BY month, promotion, goodcode  ORDER BY month";
         var sqlClass = " SELECT month, promotion, goodcode, sum(saleroom) as saleRoomSum FROM  " + tableName + " WHERE goodcode in ( SELECT t.goodcode FROM ( SELECT goodcode FROM " + tableName + " WHERE " + condition + " GROUP BY goodcode ORDER BY sum(saleroom) desc LIMIT " + limit + "  ) as t ) and " + condition + "  GROUP BY month, promotion, goodcode  ORDER BY month";
         // console.log(sqlClass);
-        // var cacheKey = "out_jd_"+md5(sqlClass);
-        // cacheResult = myCache.get(cacheKey);
-        // if ( cacheResult == undefined ){
+        var cacheKey = "out_jd_"+md5(sqlClass);
+        cacheResult = myCache.get(cacheKey);
+        if ( cacheResult == undefined ){
             var rowsMonth = await db.query(sqlClass);
             for (var row of rowsMonth) {
                 var monthPromotionKey = row.month + row.promotion;
@@ -812,13 +813,13 @@ router.post('/outjdgood', multerx.single(), async function (req, res, next) {
                 months: months
             };
             
-            // myCache.set(cacheKey, rtn.data);
-        // }else{
-        //     console.log("cache");
-        //     rtn.code = 200;
-        //     rtn.msg = "success";
-        //     rtn.data = cacheResult;
-        // }
+            myCache.set(cacheKey, rtn.data);
+        }else{
+            console.log("cache");
+            rtn.code = 200;
+            rtn.msg = "success";
+            rtn.data = cacheResult;
+        }
 
         res.json(rtn);
     } catch (err) {
