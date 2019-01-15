@@ -57,25 +57,23 @@ router.post('/addComp', multerx.single(), async function (req, res, next) {
   var createTableSql =  //"SET FOREIGN_KEY_CHECKS=0;" +
     // "DROP TABLE IF EXISTS `" + tableName + "`;" +
     "CREATE TABLE `" + tableName + "` (" +
-    "`id` int(11) NOT NULL AUTO_INCREMENT," +
-    "`ranking` varchar(255) DEFAULT NULL," +
-    "`shoptype` varchar(255) DEFAULT NULL," +
-    "`goodstitle` varchar(255) NOT NULL," +
-    "`goodslink` varchar(255) DEFAULT NULL," +
-    "`shopname` varchar(255) DEFAULT NULL," +
-    "`shopkeeper` varchar(255) DEFAULT NULL," +
-    "`reputation` varchar(255) DEFAULT NULL," +
-    "`shopdsr` varchar(255) DEFAULT NULL," +
-    "`shopcity` varchar(255) DEFAULT NULL," +
-    "`goodspriceo` float DEFAULT NULL," +
-    "`goodspricen` float DEFAULT NULL," +
-    "`goodsstock` int(11) DEFAULT NULL," +
-    "`goodsexpress` float DEFAULT NULL," +
-    "`monthsale` int(11) DEFAULT NULL," +
-    "`commentnum` int(11) DEFAULT NULL," +
-    "`goodsinfo` varchar(255) DEFAULT NULL," +
-    "`saleroom` float DEFAULT NULL," +
-    "`month` varchar(255) DEFAULT NULL," +
+    "`id`  int(11) NOT NULL AUTO_INCREMENT ,"+
+    "`ranking`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,"+
+    "`shoptype`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,"+
+    "`goodstitle`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL ,"+
+    "`goodslink`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,"+
+    "`shopkeeper`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,"+
+    "`goodspricen`  float NULL DEFAULT NULL ,"+
+    "`goodsexpress`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' ,"+
+    "`customers`  int(11) NULL DEFAULT NULL ,"+
+    "`monthsale`  int(11) NULL DEFAULT NULL ,"+
+    "`promo`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' ,"+
+    "`shopcity`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,"+
+    "`shopname`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,"+
+    "`reputation`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,"+
+    "`goodsid`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' ,"+
+    "`saleroom`  float NULL DEFAULT NULL ,"+
+    "`month`  varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL ,"+
     "PRIMARY KEY (`id`)" +
     ") ENGINE=InnoDB DEFAULT CHARSET=utf8;"
     ")";
