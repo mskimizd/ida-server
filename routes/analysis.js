@@ -522,11 +522,11 @@ router.post('/goodSale', multerx.single(), async function (req, res, next) {
 
     try {
         var monthCondition = "where month in (" + monthsList + ")";
-        var sqlGoodSale = "SELECT t1.goodslink, t1.goodstitle, t1.monthSaleTotal, t1.saleRoomTotal, t2.monthsale, t2.saleroom, t2.month FROM " +
-            "(SELECT goodslink,goodstitle, sum(monthsale) as monthSaleTotal, sum(saleroom) as saleRoomTotal  FROM " + tableName + " where month in (" + monthsList + ")" +
-            "GROUP BY goodslink ORDER BY " + sortKey + " " + sortType + " LIMIT 0, " + limit + " ) as t1 " +
-            "INNER JOIN ( SELECT goodslink, monthsale, saleroom, month FROM " + tableName + " where month in (" + monthsList + ")" + ") as t2 " +
-            "on t1.goodslink = t2.goodslink ORDER BY t1." + sortKey + " " + sortType  ;
+        var sqlGoodSale = "SELECT t1.goodsid, t1.goodstitle, t1.monthSaleTotal, t1.saleRoomTotal, t2.monthsale, t2.saleroom, t2.month FROM " +
+            "(SELECT goodsid,goodstitle, sum(monthsale) as monthSaleTotal, sum(saleroom) as saleRoomTotal  FROM " + tableName + " where month in (" + monthsList + ")" +
+            "GROUP BY goodsid ORDER BY " + sortKey + " " + sortType + " LIMIT 0, " + limit + " ) as t1 " +
+            "INNER JOIN ( SELECT goodsid, monthsale, saleroom, month FROM " + tableName + " where month in (" + monthsList + ")" + ") as t2 " +
+            "on t1.goodsid = t2.goodsid ORDER BY t1." + sortKey + " " + sortType  ;
         //console.log(new Date());
 
         var cacheKey = tableName+"_"+md5(sqlGoodSale);
@@ -534,11 +534,11 @@ router.post('/goodSale', multerx.single(), async function (req, res, next) {
         if ( cacheResult == undefined ){
             var rowsGoodSale = await db.query(sqlGoodSale);
             for (var row of rowsGoodSale) {
-                var index = _.indexOf(goods, row.goodslink);
+                var index = _.indexOf(goods, row.goodsid);
                 if (index == -1) {
-                    goods.push(row.goodslink);
+                    goods.push(row.goodsid);
                     var rowjson = {
-                        goodslink: row.goodslink,
+                        goodslink: row.goodsid,
                         goodstitle: row.goodstitle,
                         monthSaleTotal: row.monthSaleTotal,
                         saleRoomTotal: row.saleRoomTotal,
