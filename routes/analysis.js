@@ -28,62 +28,72 @@ var myCache = new NodeCache({stdTTL: 604800}); // 7 * 24 * 3600
 router.post('/dataAmountTotal', multerx.single(), async function (req, res, next) {
     var rtn = {};
 
-    try {
-        var compsql = "SELECT * FROM `sys_upload_source` where upSrcClass = 2 ;";
-        var comps = await db.query(compsql);
-        var statsql = "SELECT SUM(a) as t from ( SELECT COUNT(*)  a FROM ind_industry ";
-        var compcount = 0;
-        for(var comp of comps){
-            var tmpsql = " UNION ALL SELECT COUNT(*)  a FROM "+ comp.upSrcTable +" ";
-            statsql = statsql + tmpsql;
-            compcount = compcount + 1;
-        }
-        statsql = statsql + ") as aa";
-        var rowStats = await db.query(statsql);
-        rtn.code = 200;
-        rtn.msg = "success";
-        rtn.data = {
-            total:rowStats[0].t,
-            comps:compcount,
-            platform:2,
-        };
-        res.json(rtn);
-    } catch (err) {
-        console.log(err);
-        rtn.code = 300;
-        rtn.msg = err;
-        res.json(rtn);
-    }
+    res.header('Access-Control-Allow-Credentials', true);
+
+    console.log(req);
+
+    console.log(req.isAuthenticated());
+
+    res.json(rtn);
+
+
+    // try {
+    //     var compsql = "SELECT * FROM `sys_upload_source` where upSrcClass = 2 ;";
+    //     var comps = await db.query(compsql);
+    //     var statsql = "SELECT SUM(a) as t from ( SELECT COUNT(*)  a FROM ind_industry ";
+    //     var compcount = 0;
+    //     for(var comp of comps){
+    //         var tmpsql = " UNION ALL SELECT COUNT(*)  a FROM "+ comp.upSrcTable +" ";
+    //         statsql = statsql + tmpsql;
+    //         compcount = compcount + 1;
+    //     }
+    //     statsql = statsql + ") as aa";
+    //     var rowStats = await db.query(statsql);
+    //     rtn.code = 200;
+    //     rtn.msg = "success";
+    //     rtn.data = {
+    //         total:rowStats[0].t,
+    //         comps:compcount,
+    //         platform:2,
+    //     };
+    //     res.json(rtn);
+    // } catch (err) {
+    //     console.log(err);
+    //     rtn.code = 300;
+    //     rtn.msg = err;
+    //     res.json(rtn);
+    // }
 });
 
 
 router.post('/dataAmountPerMonth', multerx.single(), async function (req, res, next) {
     var rtn = {};
+    res.json(rtn);
 
-    try {
-        var compsql = "SELECT * FROM `sys_upload_source` where upSrcClass = 2 ;";
-        var comps = await db.query(compsql);
-        var statsql = "SELECT SUM(amount) as amount, month from ( SELECT COUNT(*)  as amount , month  FROM ind_industry group by month ";
-        var compcount = 0;
-        for(var comp of comps){
-            var tmpsql = " UNION ALL SELECT COUNT(*) as amount , month  FROM "+ comp.upSrcTable +" group by month";
-            statsql = statsql + tmpsql;
-            compcount = compcount + 1;
-        }
-        statsql = statsql + ") as aa group by month";
-        var monthdata = await db.query(statsql);
-        rtn.code = 200;
-        rtn.msg = "success";
-        rtn.data = {
-            monthdata: _.reject(monthdata,{month:""}),
-        };
-        res.json(rtn);
-    } catch (err) {
-        console.log(err);
-        rtn.code = 300;
-        rtn.msg = err;
-        res.json(rtn);
-    }
+    // try {
+    //     var compsql = "SELECT * FROM `sys_upload_source` where upSrcClass = 2 ;";
+    //     var comps = await db.query(compsql);
+    //     var statsql = "SELECT SUM(amount) as amount, month from ( SELECT COUNT(*)  as amount , month  FROM ind_industry group by month ";
+    //     var compcount = 0;
+    //     for(var comp of comps){
+    //         var tmpsql = " UNION ALL SELECT COUNT(*) as amount , month  FROM "+ comp.upSrcTable +" group by month";
+    //         statsql = statsql + tmpsql;
+    //         compcount = compcount + 1;
+    //     }
+    //     statsql = statsql + ") as aa group by month";
+    //     var monthdata = await db.query(statsql);
+    //     rtn.code = 200;
+    //     rtn.msg = "success";
+    //     rtn.data = {
+    //         monthdata: _.reject(monthdata,{month:""}),
+    //     };
+    //     res.json(rtn);
+    // } catch (err) {
+    //     console.log(err);
+    //     rtn.code = 300;
+    //     rtn.msg = err;
+    //     res.json(rtn);
+    // }
 });
 
 // 带缓存

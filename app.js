@@ -4,12 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
+var passport = require('passport')
+var session = require('express-session')
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var filesRouter = require('./routes/files');
 var analysisRouter = require('./routes/analysis');
 var systemRouter = require('./routes/system');
+
 
 var app = express();
 
@@ -21,7 +25,12 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({secret: 'ida.me',resave: false, saveUninitialized: true, cookie: { maxAge: 60000 }}));
 app.use(express.static(path.join(__dirname, 'public')));
+
+// passport configuration
+app.use(passport.initialize());
+app.use(passport.session());
 
 
 // var allowCrossDomain = function (req, res, next) {
