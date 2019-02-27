@@ -4,8 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
-var passport = require('passport')
 var session = require('express-session')
+
+var passport = require('./auth/index')
 
 
 var indexRouter = require('./routes/index');
@@ -41,7 +42,23 @@ app.use(passport.session());
 // };
 
 // app.use(allowCrossDomain);
-app.use(cors())
+app.use(cors({
+  "origin": true,
+  "credentials": true
+}))
+
+app.use(function (req, res, next) {
+
+  if(req.isAuthenticated() || req.path=="/users/login"){
+    next();    
+  }else{
+    res.json({
+      code: 300
+    });
+  }
+
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/files', filesRouter);
