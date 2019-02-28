@@ -1,24 +1,37 @@
+var db = require("../db/index");
 var passport = require('passport')
   , LocalStrategy = require('passport-local').Strategy;
 
 passport.use(new LocalStrategy(
-    function(username, password, done) {
+    async function(username, password, done) {
 
-        console.log("check!");
+        // console.log("check!");
+        try {
+            var userCheckSql = "SELECT * FROM `sys_users` where username='"+username+"' and password='"+password+"'";
+            var users = await db.query(userCheckSql);
+            if(users.length == 0){
+                return done(null, false, { message: 'Incorrect username or password.' });
+            }
+        } catch (err) {
+            return done(null, false, { message: 'system error' });
+        }            
+        // console.log(users);
 
-        var user = {
-            id: '1',
-            username: 'admin',
-            password: 'admin'
-        }; // 可以配置通过数据库方式读取登陆账号
+        // var user = {
+        //     id: '1',
+        //     username: 'admin',
+        //     password: 'admin'
+        // }; // 可以配置通过数据库方式读取登陆账号
 
-        if (username !== user.username) {
-            return done(null, false, { message: 'Incorrect username.' });
-        }
-        if (password !== user.password) {
-            return done(null, false, { message: 'Incorrect password.' });
-        }
+        // if (username !== user.username) {
+        //     return done(null, false, { message: 'Incorrect username.' });
+        // }
+        // if (password !== user.password) {
+        //     return done(null, false, { message: 'Incorrect password.' });
+        // }
 
+        // console.log(users[0]);
+        var user = users[0];
         return done(null, user);
  
     }
