@@ -49,13 +49,15 @@ app.use(cors({
 
 app.use(function (req, res, next) {
 
-  if(req.isAuthenticated() || req.path=="/users/login"){
-    next();    
-  }else{
-    res.json({
-      code: 300
-    });
-  }
+  // if(req.isAuthenticated() || req.path=="/users/login" || req.path=="/files/upload"){
+  //   next();    
+  // }else{
+  //   res.json({
+  //     code: 300
+  //   });
+  // }
+
+  next(); 
 
 });
 

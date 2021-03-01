@@ -1,12 +1,16 @@
 const mysql = require('mysql')
 var pool = mysql.createPool({
     // host: "172.16.52.129",
-    host: "10.0.0.2",
+    // host: "10.0.0.2",
     // host: "218.244.133.208",
-    // host: "localhost",
-    user: "user1",
-    password: "123456",
-    database: "ida"
+    //host: "localhost",
+    //user: "user1",
+    //password: "123456",
+    //database: "ida"
+    host: "10.0.0.24",
+    user: "root",
+    password: "dapt123",
+    database: "ida"    
 });
 
 function queryAsync(sql,callback){
